@@ -32,23 +32,14 @@ pd.set_option('display.max_colwidth', 1000)
 
 
 
-file_path = '/content/drive/MyDrive/tawfeeq/RE_dataset.json'
+file_path = '/content/RE_dataset.json'
 
-
-
-
-df = pd.read_json(file_path)
-
-
-
-
+d = pd.read_json(file_path)
 
 df.fillna('', inplace=True)
 
 display(len(df))
 display(df[:4])
-
-
 
 df = df[df['text'] != '']
 
@@ -61,10 +52,7 @@ df['label'] = df['label'].astype('category')
 df['label'] = df['label'].cat.codes
 
 
-
 df = df[['text', 'label']]
-
-
 classes_num = len(classes)
 display(classes_num)
 display(len(df))
@@ -77,7 +65,6 @@ ds = ds.train_test_split(test_size=0.2, seed=42)
 display(ds)
 
 max_sequence_length = 128
-
 
 models = [
     # 'microsoft/deberta-v3-base',
@@ -119,10 +106,8 @@ class BertLSTMModel(nn.Module):
 
         return SequenceClassifierOutput(
             loss=loss,
-            logits=logits,
+            logits=logit,
         )
-
-
 
 for model_name in models:
     for i in range(1):
@@ -220,11 +205,6 @@ df_mis.to_json("misclassified_test.json", orient="records", force_ascii=False, i
 print("done finding misclassified")
 
 
-
-
-
-
-
 import os
 import json
 import torch
@@ -265,6 +245,4 @@ plt.title("Confusion Matrix (%)")
 plt.tight_layout()
 plt.savefig("confusion_matrix_percent.png", dpi=200)
 plt.close()
-
-
 
